@@ -1,0 +1,50 @@
+﻿@page "/"
+@using System.Reflection
+@using System.Net
+@inject IHostEnvironment Env
+@rendermode InteractiveServer
+
+@if (_selectedFile)
+{
+    if (_assembly != null)
+    {
+        <h1>@_assembly.FullName</h1>
+        foreach (var item in _assembly.ExportedTypes)
+        {
+            <TypeComponent Type="item"></TypeComponent>
+        }
+    }
+}
+else
+{
+    <h3>Select file:</h3>
+    <InputFile OnChange="OnFileChange"></InputFile>
+}
+
+
+@code{
+    private bool _selectedFile = false;
+    private Assembly? _assembly;
+
+    private async void OnFileChange(InputFileChangeEventArgs obj)
+    {
+        var id = Guid.NewGuid();
+        if (!Directory.Exists("upload"))
+            Directory.CreateDirectory("upload");
+
+        var path = $"upload/{id}.dll";
+
+        using (Stream stream = File.Create(path))
+        {
+            await obj.File.OpenReadStream().CopyToAsync(stream);
+            stream.Flush();
+        }
+
+        _assembly = Assembly.LoadFile($"{Env.ContentRootPath}/{path}");
+
+        _selectedFile = true;
+        StateHasChanged();
+    }
+
+}
+

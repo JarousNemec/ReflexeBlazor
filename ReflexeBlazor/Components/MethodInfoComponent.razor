@@ -1,0 +1,23 @@
+﻿@using System.Reflection
+
+@if (Info != null)
+{
+    <div style="display: flex">
+        <div>@(Info.IsPublic ? "public":"")<p> </p></div>
+        <div>@(Info.IsPrivate ? "private":"")<p> </p></div>
+        <div>@(Info.IsStatic ? "static":"")<p> </p></div>
+        <div>@(Info.ReturnType.Name)<p> </p></div>
+        <div>@Info.Name<p> </p></div>
+        (
+        @foreach (var param in Info.GetParameters())
+        {
+            <div>@param.ParameterType.Name @param.Name, </div>
+        }
+        )
+    </div>
+}
+
+@code {
+    [Parameter] public MethodInfo Info { get; set; }
+}
+

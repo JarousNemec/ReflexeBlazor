@@ -1,0 +1,45 @@
+﻿@using System.Reflection
+@if (Type != null)
+{
+    <div style="border: #0a53be solid 3px; border-radius: 10px; margin: 10px; padding: 5px">
+        <h3>@(Type.Name)</h3>
+
+        <HiddingComponet>
+            <ChildContent>
+                @if (Type.IsClass)
+                {
+                    <span>CLASS</span>
+                }
+                @if (Type.IsPublic)
+                {
+                    <span>PUBLIC</span>
+                }
+
+                @if (Type.IsEnum)
+                {
+                    <span>ENUM</span>
+                }
+                <div>
+                    <h4>Properties:</h4>
+                    @foreach (var prop in Type.GetProperties())
+                    {
+                        <PropInfoComponent Info="prop"></PropInfoComponent>
+                    }
+                </div>
+
+                <div>
+                    <h4>Methods:</h4>
+                    @foreach (var prop in Type.GetMethods(BindingFlags.Static))
+                    {
+                        <MethodInfoComponent Info="prop"></MethodInfoComponent>
+                    }
+                </div>
+            </ChildContent>
+        </HiddingComponet>
+    </div>
+}
+
+
+@code {
+    [Parameter] public Type? Type { get; set; }
+}

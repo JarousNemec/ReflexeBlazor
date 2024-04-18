@@ -1,0 +1,15 @@
+﻿@using System.Reflection
+
+@if (Info != null)
+{
+    <div style="display: flex">
+        <div>@((Info.CanRead || Info.CanWrite) ? "public              " : "private ")</div>
+        <div>@(Info.PropertyType.Name+"                ")</div>
+        <div>@(Info.Name+"           ") </div>
+        { get; set;}
+    </div>
+}
+
+@code {
+    [Parameter] public PropertyInfo? Info { get; set; }
+}
