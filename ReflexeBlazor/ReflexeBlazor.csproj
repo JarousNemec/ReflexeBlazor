@@ -6,8 +6,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>aspnet-ReflexeBlazor-6148A935-EC86-4819-BA0B-37D276BC3F69</UserSecretsId>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        
     </PropertyGroup>
-
     <ItemGroup>
         <None Update="Data\app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true"/>
     </ItemGroup>

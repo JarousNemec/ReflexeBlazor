@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using ReflexeBlazor.Components;
 using ReflexeBlazor.Components.Account;
 using ReflexeBlazor.Data;
+using ReflexeBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +36,8 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+builder.Services.AddSingleton<CacheService>();
+builder.Services.AddSingleton<FilterService>();
 
 var app = builder.Build();
 

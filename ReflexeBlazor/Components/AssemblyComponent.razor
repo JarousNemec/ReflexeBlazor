@@ -1,0 +1,22 @@
+﻿@using System.Reflection
+
+<div style="border: #0a53be solid 3px; border-radius: 10px; margin: 10px; padding: 5px">
+    <h3>@Assembly.FullName</h3>
+    <button class="btn btn-info" @onclick="() => RemoveAction(Id)">X</button>
+    <HiddingComponet>
+        <ChildContent>
+            @foreach (var item in Assembly.ExportedTypes)
+            {
+                <TypeComponent Type="item"></TypeComponent>
+            }
+        </ChildContent>
+    </HiddingComponet>
+
+</div>
+
+
+@code {
+    [Parameter] public string Id { get; set; }
+    [Parameter] public Assembly Assembly { get; set; }
+    [Parameter] public Action<string> RemoveAction { get; set; }
+}

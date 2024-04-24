@@ -1,4 +1,7 @@
 ﻿@using System.Reflection
+@using ReflexeBlazor.Services
+@inject FilterService FilterService
+@rendermode InteractiveServer
 @if (Type != null)
 {
     <div style="border: #0a53be solid 3px; border-radius: 10px; margin: 10px; padding: 5px">
@@ -21,18 +24,46 @@
                 }
                 <div>
                     <h4>Properties:</h4>
-                    @foreach (var prop in Type.GetProperties())
+                    @if (FilterService.FilterFlags.Count > 0)
                     {
-                        <PropInfoComponent Info="prop"></PropInfoComponent>
+                        @foreach (var filter in FilterService.FilterFlags)
+                        {
+                            foreach (var prop in Type.GetProperties(BindingFlags.DeclaredOnly | filter | BindingFlags.Instance))
+                            {
+                                <PropInfoComponent Info="prop"></PropInfoComponent>
+                            }
+                        }
                     }
+                    else
+                    {
+                        foreach (var prop in Type.GetProperties())
+                        {
+                            <PropInfoComponent Info="prop"></PropInfoComponent>
+                        }
+                    }
+
                 </div>
 
                 <div>
                     <h4>Methods:</h4>
-                    @foreach (var prop in Type.GetMethods(BindingFlags.Static))
+                    @if (FilterService.FilterFlags.Count > 0)
                     {
-                        <MethodInfoComponent Info="prop"></MethodInfoComponent>
+                        foreach (var filter in FilterService.FilterFlags)
+                        {
+                            foreach (var prop in Type.GetMethods(BindingFlags.DeclaredOnly | filter | BindingFlags.Instance))
+                            {
+                                <MethodInfoComponent Info="prop"></MethodInfoComponent>
+                            }
+                        }
                     }
+                    else
+                    {
+                        foreach (var prop in Type.GetMethods())
+                        {
+                            <MethodInfoComponent Info="prop"></MethodInfoComponent>
+                        }
+                    }
+
                 </div>
             </ChildContent>
         </HiddingComponet>
@@ -42,4 +73,19 @@
 
 @code {
     [Parameter] public Type? Type { get; set; }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            FilterService.OnFilterChange += FilterServiceOnOnFilterChange;
+        }
+    }
+
+
+    private void FilterServiceOnOnFilterChange()
+    {
+        StateHasChanged();
+    }
+
 }
